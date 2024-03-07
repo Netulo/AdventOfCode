@@ -3,15 +3,15 @@
 #include<fstream>
 #include<map>
 #include<vector>
-#include <algorithm>
+#include<algorithm>
 
 using namespace std;
 
-int countStep(string mapID, string instruction, map<string, string> maps, map<string, int> &startingPoints, bool isFirst);
+int countStep(int mapID, string &instruction, map<string, string> &maps, vector<vector<string>> &startingPoints, bool isFirst);
 
 int main()
 {
-    fstream myFile("test-p2.txt");
+    fstream myFile("input.txt");
 
     if(!myFile.is_open())
     {
@@ -38,32 +38,54 @@ int main()
         
     }
 
-    for(auto x : maps)
-        cout << x.first << " -> " << x.second << endl;
+    // for(auto x : maps)
+    //     cout << x.first << " -> " << x.second << endl;
 
-    map<string, int> startingPoints;
+    vector<vector<string>> startingPoints;
     for(auto x : maps)
         if(x.first[2] == 'A')
-            startingPoints[x.first] = 0;
+            startingPoints.push_back({x.first, "0"});
 
     // for(auto x : startingPoints)
     //     cout << x.first << " -> " << x.second << endl;
 
     int count;
+    int temp = 0;
     while(true)
     {
-        for(auto x : startingPoints)
-        {
-            countStep(x.first, instruction, maps, startingPoints, true);
-            count = startingPoints[x.first];
-        }
+        // for(int x = 0; x < startingPoints.size(); ++x)
+        // {
+        //     countStep(x, instruction, maps, startingPoints, true);
+        //     count = stoi(startingPoints[x][1]);
+        // }
 
-        for(auto x : startingPoints)
-            cout << x.first << " -> " << x.second << endl;
+        countStep(temp%startingPoints.size(), instruction, maps, startingPoints, true);
+        count = stoi(startingPoints[temp%startingPoints.size()][1]);
+        temp++;
+
+        // for(int x = 0; x < startingPoints.size(); ++x)
+        //     cout << startingPoints[x][0] << " -> " << startingPoints[x][1] << endl;
         
-        cout << endl;
+       
+        
+        //cout << endl;
+        // if(all_of(startingPoints.begin(), startingPoints.end(), [&](auto i){return i[1] == startingPoints[i];}))
+        //     break;
+        bool isAllEq = true;
 
-        if(all_of(startingPoints.begin(), startingPoints.end(), [&](auto i){return i.second == startingPoints.begin() -> second;}))
+        for (int i = 0; i < startingPoints.size()-1; i++)
+        {
+            if(startingPoints[i][1] == startingPoints[i+1][1])
+                isAllEq = true;
+            else
+            {
+                isAllEq = false;
+                break;
+            }
+
+        }
+        
+        if(isAllEq)
             break;
     }
 
@@ -73,20 +95,27 @@ int main()
 
 
 
-int countStep(string mapID, string instruction, map<string, string> maps, map<string, int> &startingPoints, bool isFirst)
+int countStep(int mapID, string &instruction, map<string, string> &maps, vector<vector<string>> &startingPoints, bool isFirst)
 {
 
-    if(mapID.substr(2, 1) == "Z" && !isFirst)
+    if(startingPoints[mapID][0].substr(2, 1) == "Z" && !isFirst)
         return 0;
+        
 
-    int count = startingPoints[mapID];
-    startingPoints.erase(mapID);
+    int count = stoi(startingPoints[mapID][1]);
+    //startingPoints.erase(mapID);
+    //auto nodeHandler = startingPoints.extract(mapID);
+    //auto nextt = next(mapID);
+
     if(instruction[count%instruction.length()] == 'L')
-        mapID = maps[mapID].substr(1, 3);
+        startingPoints[mapID][0] = maps[startingPoints[mapID][0]].substr(1, 3);
     else
-        mapID = maps[mapID].substr(6, 3);
+        startingPoints[mapID][0] = maps[startingPoints[mapID][0]].substr(6, 3);
 
-    startingPoints[mapID] = count+1;
+    //nodeHandler.key() = mapID;
+    //startingPoints.insert(move(nodeHandler));
+    count++;
+    startingPoints[mapID][1] = to_string(count);
 
     return countStep(mapID, instruction, maps, startingPoints, false) + 1;
 }
