@@ -1,4 +1,4 @@
-f = open('2021/Day 4/test.txt', 'r')
+f = open('2021/Day 4/input.txt', 'r')
 numberSet = f.readline().split(',')
 f.readline()
 boards = f.read().split('\n\n')
@@ -24,24 +24,26 @@ def SumOfTable(table, numberSet):
     return sum
     
 def BingoRow(boards, board, tempNumberSet):
-    for row in boards[board]:    
-        if all(e in tempNumberSet for e in row):
-            if len(boards) == 1:
-                return int(tempNumberSet[-1]) * SumOfTable(boards[board], tempNumberSet)
-            else:
-                boards.pop(board)
-                break
-    return boards
-                
-def BingoCol(boards, board, tempNumberSet):
-    for row in range(len(boards[board])):  
-        for col in range(len(boards[board][row])):
-            if all(e[col] in tempNumberSet for e in boards[board]):
+    if board<len(boards):
+        for row in boards[board]:    
+            if all(e in tempNumberSet for e in row):
                 if len(boards) == 1:
                     return int(tempNumberSet[-1]) * SumOfTable(boards[board], tempNumberSet)
                 else:
                     boards.pop(board)
-                    break
+                    return boards
+    return boards
+                
+def BingoCol(boards, board, tempNumberSet):
+    if board<len(boards):
+        for row in range(len(boards[board])):  
+            for col in range(len(boards[board][row])):
+                if all(e[col] in tempNumberSet for e in boards[board]):
+                    if len(boards) == 1:
+                        return int(tempNumberSet[-1]) * SumOfTable(boards[board], tempNumberSet)
+                    else:
+                        boards.pop(board)
+                        return boards
     return boards
     
 def checkIfBingo(numberSet, boards):
