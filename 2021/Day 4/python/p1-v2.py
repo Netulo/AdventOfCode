@@ -1,4 +1,4 @@
-f = open('2021/Day 4/input.txt', 'r')
+f = open('2021/Day 4/test.txt', 'r')
 numberSet = f.readline().split(',')
 f.readline()
 boards = f.read().split('\n\n')
@@ -35,5 +35,4 @@ def checkIfBingo(numberSet, boards):
                     if all(e[col] in tempNumberSet for e in boards[board]):
                         return int(tempNumberSet[-1]) * SumOfTable(boards[board], tempNumberSet)
                 
-print(checkIfBingo(numberSet, boards))
-                        
+print(checkIfBingo(numberSet, boards))                  
