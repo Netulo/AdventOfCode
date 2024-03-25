@@ -1,8 +1,10 @@
+# Good
 def testCaseOne(text):
     if any(x in ['i', 'l', 'o'] for x in text):
         return False
     return True
 
+# Good
 def testCaseTwo(text):
     for x in range(len(text)):
         if x == len(text)-2:
@@ -11,6 +13,7 @@ def testCaseTwo(text):
             break
     return True
 
+# Not working properly #
 def testCaseThree(text):
     pairs = dict()
     for x in range(len(text)-1):
@@ -21,9 +24,11 @@ def testCaseThree(text):
         if len(pairs) == 2:
             return True
     return False        
+########################
 
 def isValid(passwd):
-    if testCaseOne(passwd) and testCaseTwo(passwd) and testCaseThree(passwd): return True
+    if testCaseOne(passwd) and testCaseTwo(passwd) and testCaseThree(passwd):
+        return True
     return False
 
 def incPasswd(password):
@@ -34,11 +39,23 @@ def incPasswd(password):
         password = password[:-1] + chr(ord(password[-1])+1)
         return password
 
-f = open('2015/Day 11/input.txt')
+f = open('2015/Day 11/test.txt')
 expPass = f.readline()
+expPass = 'cqjxjnds'
+
+# print(testCaseOne(expPass))
+# print(testCaseTwo(expPass))
+# print(testCaseThree(expPass))
 
 while(True):
     expPass = incPasswd(expPass)
     if isValid(expPass):
         print(expPass)
         break
+    
+    
+# WRONG
+# - cqkaabcc
+# - 
+
+# RIGHT -  cqjxxyzz
