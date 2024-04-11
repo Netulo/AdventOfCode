@@ -17,5 +17,4 @@ for i in range(len(text)):
         if temp < min(nums):
             answ += 1+temp
         
-print(answ)
-        
+print(answ)       
