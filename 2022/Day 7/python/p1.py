@@ -1,3 +1,4 @@
+from collections import Counter
 f = open('2022/Day 7/test.txt', 'r')
 lines = f.read().split('\n')
 
@@ -14,8 +15,10 @@ for line in lines:
         temp = dirTree
         for i in currentDirectory: temp = temp[i]
         if 'dir' in line: temp[line[line.find(' ')+1:]] = dict()
-        else: temp[line[line.find(' ')+1:]] = int(line[:line.find(' ')])
-
-        
-print(dirTree)
-
+        # else: temp[line[line.find(' ')+1:]] = int(line[:line.find(' ')])
+        else: temp[line[:line.find(' ')]] = int(line[:line.find(' ')])
+ 
+ 
+for x in dirTree['/']:
+    print(x)
+# print(dirTree)

@@ -1,6 +1,24 @@
+def BasinsCount(x, y, table):
+    dic = dict()
+
+    if y+1 != len(table) and int(table[y+1][x]) > int(table[y][x]) and int(table[y+1][x]) != 9:
+        dic = dic | BasinsCount(x, y+1, table) | {(x,y+1) : 1}
+
+    if y != 0 and int(table[y-1][x]) > int(table[y][x]) and int(table[y-1][x]) != 9:
+        dic = dic | BasinsCount(x, y-1, table) | {(x,y-1) : 1}
+
+    if x+1 != len(table[y]) and int(table[y][x+1]) > int(table[y][x]) and int(table[y][x+1]) != 9:
+        dic = dic | BasinsCount(x+1, y, table) | {(x+1,y) : 1}
+
+    if x != 0 and int(table[y][x-1]) > int(table[y][x]) and int(table[y][x-1]) != 9:
+        dic = dic | BasinsCount(x-1, y, table) | {(x-1,y) : 1}
+        
+    return dic
+
 f = open('2021/Day 9/input.txt', 'r')
 text = f.read().split('\n')
-answ = 0
+
+basins = []
 for i in range(len(text)):
     for j in range(len(text[i])):
         nums = []
@@ -17,4 +35,5 @@ for i in range(len(text)):
         if temp < min(nums):
             answ += 1+temp
         
-print(answ)       
+print(answ)
+        
