@@ -11,7 +11,7 @@ int countStep(int mapID, string &instruction, map<string, string> &maps, vector<
 
 int main()
 {
-    fstream myFile("input.txt");
+    fstream myFile("../input.txt");
 
     if(!myFile.is_open())
     {
