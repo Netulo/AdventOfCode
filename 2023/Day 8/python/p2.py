@@ -1,3 +1,4 @@
+from math import gcd
 with open('2023/Day 8/input.txt', 'r') as file:
     text = file.read().split('\n\n')
 
@@ -28,3 +29,7 @@ for i in range(len(currentKeys)):
     
 
 print(f"Total iterations: {currentKeys}")
+lcm = 1
+for i in currentKeys:
+    lcm = lcm*i//gcd(lcm, i)
+print(lcm)
