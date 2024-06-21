@@ -2,19 +2,28 @@ import math
 f = open('2015/Day 4/test.txt', 'r')
 
 test = f.read()
-secredKey = 'abcdef609043'
+secredKey = 'They are deterministic'
 
 def F(x, y, z):
-    return (int(x, 2) & int(y, 2)) | (~int(x, 2) & int(z, 2))
+    return (int(x, 2) & int(y, 2)) | (int(Not(x), 2) & int(z, 2))
 
 def G(x, y, z):
-    return (int(x, 2) & int(z, 2)) | (int(y, 2) & ~int(z, 2))
+    return (int(x, 2) & int(z, 2)) | (int(y, 2) & int(Not(z), 2))
 
 def H(x, y, z):
     return (int(x, 2) ^ int(y, 2) ^ int(z, 2))
 
 def I(x, y, z):
-    return (int(y, 2) ^ (int(x, 2) | ~int(z, 2)))
+    return (int(y, 2) ^ (int(x, 2) | int(Not(z), 2)))
+
+def Not(x):
+    if x.find('b') != -1:
+        x= x[2:]
+    x = x.replace('1', '.')
+    x = x.replace('0', '1')
+    x = x.replace('.', '0')
+    return x
+
 
 # Formating string to bits
 message = ''.join(format(ord(i), '08b') for i in secredKey)
@@ -65,29 +74,64 @@ for i in range(int(len(message)/512)):
     M = [chunk[x*32:(x+1)*32] for x in range(16)]
     
     g = 0
-    for x in range(63):
+    for x in range(64):
         if g > 15:
-            g = g%15
+            g = g%16
+        # print(str(x) + ": " + str(g))
         
         if x < 16:
-            temp = bin((int(Bb, 2) + ((int(K[x], 2) + (int(M[g], 2) + (int(Aa, 2) + F(Bb, Cc, Dd))%8388608)%8388608)%8388608)<<S[x])%8388608)
+            temp = F(Bb, Cc, Dd)
+            temp = (int(Aa, 2) + temp)%4294967296
+            temp = (int(M[g], 2) + temp)%4294967296
+            temp = (int(K[x], 2) + temp)%4294967296
+            temp = bin(temp)[2:]
+            temp = '0'*(len(temp)%4) + temp
+            temp = int((temp[S[x]:] + temp[:S[x]]), 2)
+            temp = (int(Bb, 2) + temp)%4294967296
+            # print(hex(temp))
+            temp = bin(temp)
             g += 1
             if x == 15:
                 g = 1
                 
         elif x < 32:
-            temp = bin((int(Bb, 2) + ((int(K[x], 2) + (int(M[g], 2) + (int(Aa, 2) + G(Bb, Cc, Dd))%8388608)%8388608)%8388608)<<S[x])%8388608)
+            temp = G(Bb, Cc, Dd)
+            # print(hex(temp))
+            temp = (int(Aa, 2) + temp)%4294967296
+            temp = (int(M[g], 2) + temp)%4294967296
+            temp = (int(K[x], 2) + temp)%4294967296
+            temp = bin(temp)[2:]
+            temp = '0'*(len(temp)%4) + temp
+            temp = int((temp[S[x]:] + temp[:S[x]]), 2)
+            temp = (int(Bb, 2) + temp)%4294967296
+            temp = bin(temp)
             g += 5
-            if x == 32:
+            if x == 31:
                 g = 5
                 
         elif x < 48:
-            temp = bin((int(Bb, 2) + ((int(K[x], 2) + (int(M[g], 2) + (int(Aa, 2) + H(Bb, Cc, Dd))%8388608)%8388608)%8388608)<<S[x])%8388608)
+            temp = H(Bb, Cc, Dd)
+            temp = (int(Aa, 2) + temp)%4294967296
+            temp = (int(M[g], 2) + temp)%4294967296
+            temp = (int(K[x], 2) + temp)%4294967296
+            temp = bin(temp)[2:]
+            temp = '0'*(len(temp)%4) + temp
+            temp = int((temp[S[x]:] + temp[:S[x]]), 2)
+            temp = (int(Bb, 2) + temp)%4294967296
+            temp = bin(temp)
             g += 3
-            if x == 48:
+            if x == 47:
                 g = 0
         else:
-            temp = bin((int(Bb, 2) + ((int(K[x], 2) + (int(M[g], 2) + (int(Aa, 2) + I(Bb, Cc, Dd))%8388608)%8388608)%8388608)<<S[x])%8388608)
+            temp = I(Bb, Cc, Dd)
+            temp = (int(Aa, 2) + temp)%4294967296
+            temp = (int(M[g], 2) + temp)%4294967296
+            temp = (int(K[x], 2) + temp)%4294967296
+            temp = bin(temp)[2:]
+            temp = '0'*(len(temp)%4) + temp
+            temp = int((temp[S[x]:] + temp[:S[x]]), 2)
+            temp = (int(Bb, 2) + temp)%4294967296
+            temp = bin(temp)
             g += 7
     
         A_temp = Aa
@@ -99,11 +143,15 @@ for i in range(int(len(message)/512)):
         Bb = temp
         Cc = B_temp
         Dd = C_temp
+        print(hex(int(Aa,2)))
+        print(hex(int(Bb,2)))
+        print(hex(int(Cc,2)))
+        print(hex(int(Dd,2)))
     
-    A_init = bin((int(A_init, 2) + int(Aa, 2))%8388608)
-    B_init = bin((int(B_init, 2) + int(Bb, 2))%8388608)
-    C_init = bin((int(C_init, 2) + int(Cc, 2))%8388608)
-    D_init = bin((int(D_init, 2) + int(Dd, 2))%8388608)
+    A_init = bin((int(A_init, 2) + int(Aa, 2))%4294967296)
+    B_init = bin((int(B_init, 2) + int(Bb, 2))%4294967296)
+    C_init = bin((int(C_init, 2) + int(Cc, 2))%4294967296)
+    D_init = bin((int(D_init, 2) + int(Dd, 2))%4294967296)
     
 # print(A_init)
 # print(B_init)
@@ -112,3 +160,17 @@ for i in range(int(len(message)/512)):
 
 hash = hex(int(A_init, 2))[2:] + " " + hex(int(B_init, 2))[2:] + " " + hex(int(C_init, 2))[2:] + " " + hex(int(D_init, 2))[2:]
 print(hash)
+
+# First try - 234567 24def 168a98 21b250
+
+# def G(x, y, z):
+#     return (int(x, 2) & int(z, 2)) | (int(y, 2) & ~int(z, 2))
+
+# 
+# Testy
+# 
+# print(hex(G('101100001101001101111110100010', '11011110000101100111001110111110', '1001011100101110110001010000010')))
+# temp = bin(735250928)[2:]
+# temp = '0'*(len(temp)%4) + temp
+# print(temp[:S[0]])
+# print(int((temp[S[0]:] + temp[:S[0]]), 2))
