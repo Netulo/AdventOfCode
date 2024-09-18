@@ -10,7 +10,7 @@ int main()
     string input = " ";
     char chL, chR;
     int answ = 0;
-    fstream inputFile ("input.txt");
+    fstream inputFile ("../input.txt");
 
     //getline(cin,input,' ')
     while(getline(inputFile,input))
