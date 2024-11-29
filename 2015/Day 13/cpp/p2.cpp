@@ -23,18 +23,18 @@ int main(){
     fstream file("../input.txt");
     map< set<string> , int> dict;
     vector<int> happinessSum;
-    vector<string> names;
+    vector<string> names{"Me"};
 
     string inp;
-
     while(getline(file, inp)){
         inp = inp.substr(0,inp.size()-1);
         string firstPerson, secondPerson;
         vector<string> vec = splitString(inp, ' ');
 
-        if(count(names.begin(), names.end(), vec[0]) == 0)
+        if(count(names.begin(), names.end(), vec[0]) == 0){
             names.push_back(vec[0]);
-        
+            dict[{vec[0],"Me"}] = 0;
+        }
 
         if(inp.find("lose") != string::npos)
         {
@@ -44,9 +44,6 @@ int main(){
             dict[{vec[0],vec[vec.size()-1]}] += stoi(vec[3]);
         }
     }
-
-
-
     int maxSum = 0;
     int sum;
     do{
