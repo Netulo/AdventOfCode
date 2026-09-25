@@ -1,0 +1,23 @@
+# Puzzle inputs and examples — Advent of Code asks not to publish them
+# (https://adventofcode.com/about). Put your own input.txt in the day folder.
+input*.txt
+test*.txt
+text.txt
+
+# Build output: everything in cpp/ and c/ folders except source files
+*.exe
+*.out
+**/cpp/*
+!**/cpp/*.cpp
+!**/cpp/*.h
+!**/cpp/*.hpp
+**/c/*
+!**/c/*.c
+!**/c/*.h
+
+# Editors and tools
+.idea/
+.vscode/
+tempCodeRunnerFile.*
+__pycache__/
+.DS_Store

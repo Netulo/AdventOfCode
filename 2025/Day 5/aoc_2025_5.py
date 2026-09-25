@@ -19,7 +19,7 @@ def part1(ranges, ingredients):
     return fresh_sum
 
 
-def part2_SHIT(ranges):
+def part2(ranges):
     fresh_sum = 0
     ranges2 = []
     for i in ranges:
@@ -77,7 +77,7 @@ def main():
         fresh_ranges = tmp_load[0].splitlines()
         ingredients = tmp_load[1].splitlines()
     print(part1(fresh_ranges, ingredients))
-    print(part2_SHIT(fresh_ranges))
+    print(part2(fresh_ranges))
 
 
 if __name__ == "__main__":
